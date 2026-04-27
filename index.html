@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fMRI Image Reconstruction Study</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">fMRI Reconstruction Study</p>
+        <h1>AI-Driven Neural Surrogates for Precision Cognitive Neurostimulation</h1>
+        <p class="hero-authors">
+          Marco Rothermel, Madleen Stenger, Soroush Daftarian, Svenja Jule Francke, Bita Shariatpanahi, José C. García Alanis,
+          Mohammad-Ali Nikouei Mahani, Tim Hahn, and Hamidreza Jamalabadi
+        </p>
+        <div class="hero-meta">
+          <p><strong>Affiliations</strong></p>
+          <p>[1] Department of Psychiatry and Psychotherapy, University of Marburg, Germany</p>
+          <p>[2] Center for Mind, Brain, and Behavior (CMBB), University of Marburg, Germany</p>
+          <p>[3] Institute for Translational Psychiatry, University of Marburg, Germany</p>
+          <p>[4] Faculty of Medicine, University of British Columbia, Canada</p>
+          <p><strong>Corresponding author:</strong> Hamidreza Jamalabadi, <a href="mailto:hamidreza.jamalabadi@uni-marburg.de">hamidreza.jamalabadi@uni-marburg.de</a></p>
+        </div>
+        <p class="hero-copy">
+          Precise modulation of human cognitive-affective states holds immense clinical potential but requires robust models of
+          brain-behavior relationships and principled control methods. We introduce a framework that integrates deep generative AI
+          with a control theoretic formulation to develop an AI-driven neural model of human visual cognition, capable of designing
+          neurostimulations that modulate key dimensions such as emotional valence and memorability. Our contributions are threefold:
+          (i) we construct AI models that accurately map early-visual fMRI signals into high-dimensional latent spaces, (ii) we derive
+          closed-form neural perturbations, and (iii) we validate these perturbations across over 9,000 fMRI-image trials from the
+          Natural Scenes Dataset and 8,000 independent human ratings. Perturbations are reconstructed into photorealistic images via
+          a CLIP-guided diffusion model, enabling direct interpretation in stimulus space, and are evaluated using differentiable
+          assessors (MemNet, EmoNet) and human judgments. Across datasets and rating modalities, AI-designed perturbations achieve
+          systematic, bounded, and neurally plausible changes in emotional valence and memorability. These results establish
+          AI-driven models as reliable tools for designing future neurostimulation technologies, offering a path toward clinical
+          translation.
+        </p>
+        <figure class="hero-figure">
+          <img src="./Figure%202.JPG" alt="Study overview figure showing cognitive experience, cognitive neurostimulation, encoders, decoders, human ratings, and perturbation scoring." />
+        </figure>
+        <p class="hero-linkout">
+          <a href="https://github.com/MarRoth93/Optimal-Neural-Engineering-of-Human-Cognitive-Experience" target="_blank" rel="noreferrer">View the project on GitHub</a>
+        </p>
+      </header>
+
+      <main class="layout">
+        <section class="control-panel" aria-labelledby="controls-title">
+          <div class="panel-header">
+            <h2 id="controls-title">Display Controls</h2>
+            <p>All images are loaded directly from the current repository folders.</p>
+          </div>
+
+          <div class="control-grid">
+            <label class="field">
+              <span class="field-label">Original Image</span>
+              <select id="image-select" aria-label="Select original image"></select>
+            </label>
+
+            <div class="field">
+              <span class="field-label">Reconstruction Level</span>
+              <div class="segmented" id="model-toggle" role="group" aria-label="Select reconstruction level"></div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">Manipulation Dimension</span>
+              <div class="segmented" id="dimension-toggle" role="group" aria-label="Select manipulation dimension"></div>
+            </div>
+
+            <div class="field field-wide">
+              <span class="field-label">Visible Alpha Levels</span>
+              <div class="alpha-toggles" id="alpha-toggle" role="group" aria-label="Toggle alpha levels"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="viewer" aria-labelledby="viewer-title">
+          <div class="viewer-header">
+            <div>
+              <p class="eyebrow">Live Selection</p>
+              <h2 id="viewer-title">Study Example Viewer</h2>
+            </div>
+            <p class="selection-summary" id="selection-summary"></p>
+          </div>
+
+          <article class="card original-card">
+            <div class="card-label">
+              <span class="label-kicker">Reference</span>
+              <h3>Original image</h3>
+            </div>
+            <figure class="image-frame">
+              <img id="original-image" alt="" />
+            </figure>
+          </article>
+
+          <section class="process-section" aria-labelledby="process-title">
+            <div class="process-header">
+              <p class="eyebrow">Process Architecture</p>
+              <h3 id="process-title">fMRI Reconstruction Pipeline</h3>
+            </div>
+
+            <div class="process-flow">
+              <article class="process-node process-node-scan">
+                <div class="scan-icon" aria-hidden="true">
+                  <span class="scan-ring scan-ring-outer"></span>
+                  <span class="scan-ring scan-ring-inner"></span>
+                  <span class="scan-core">f</span>
+                </div>
+                <h4>fMRI Scan</h4>
+                <p>Early visual brain activity is measured and projected toward the model’s internal representation.</p>
+              </article>
+
+              <div class="process-arrow process-arrow-prediction" aria-hidden="true">
+                <span class="process-arrow-label">Latent Prediction</span>
+                <span class="process-arrow-line"></span>
+                <span class="process-arrow-head">→</span>
+              </div>
+
+              <article class="process-node process-node-latent">
+                <div class="latent-cloud" aria-hidden="true">
+                  <span class="latent-dot dot-1"></span>
+                  <span class="latent-dot dot-2"></span>
+                  <span class="latent-dot dot-3"></span>
+                  <span class="latent-dot dot-4"></span>
+                  <span class="latent-dot dot-5"></span>
+                  <span class="latent-dot dot-6"></span>
+                  <span class="latent-dot dot-7"></span>
+                </div>
+                <div class="latent-label">
+                  <span class="label-kicker">Dimension</span>
+                  <h4>Latent Space</h4>
+                </div>
+              </article>
+
+              <div class="process-arrow" aria-hidden="true">→</div>
+
+              <article class="process-node">
+                <div class="process-icon" aria-hidden="true">D</div>
+                <h4>Decoder</h4>
+                <p>Decodes controlled perturbations into the alpha-dependent reconstructions shown in the comparison grid.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="comparison-stage" aria-labelledby="comparison-title">
+            <h3 id="comparison-title" class="sr-only">Reconstruction comparison</h3>
+
+            <div class="alpha-column alpha-column-left" id="negative-column"></div>
+
+            <div class="center-column" id="alpha-zero-slot"></div>
+
+            <div class="alpha-column alpha-column-right" id="positive-column"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <template id="alpha-card-template">
+      <article class="card alpha-card">
+        <div class="card-label">
+          <span class="label-kicker">Manipulation</span>
+          <h3></h3>
+        </div>
+        <figure class="image-frame">
+          <img alt="" />
+        </figure>
+      </article>
+    </template>
+
+    <script src="./app.js?v=2"></script>
+  </body>
+</html>

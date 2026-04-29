@@ -579,6 +579,13 @@ select {
   object-fit: cover;
 }
 
+.assessor-score {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
 .comparison-stage {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));

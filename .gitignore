@@ -1,9 +1,3 @@
 agents.md
-*.png
-*.jpg
-*.jpeg
-*.JPG
-*.JPEG
-*.gif
-*.webp
-*.svg
+/original_test_images/
+/reconstrutions/

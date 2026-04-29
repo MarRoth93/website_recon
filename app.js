@@ -1,4 +1,4 @@
-const IMAGE_IDS = ["0", "1", "2", "3", "4"];
+const IMAGE_IDS = ["206", "735", "831", "456", "401", "35", "260", "784", "68", "400"];
 const ALPHAS = [-4, -2, 0, 2, 4];
 const MODEL_OPTIONS = [
   { value: "vdvae", label: "Low-level / VDVAE" },
@@ -14,6 +14,7 @@ const state = {
   model: MODEL_OPTIONS[1].value,
   dimension: DIMENSION_OPTIONS[1].value,
   visibleAlphas: new Set(ALPHAS),
+  scores: null,
 };
 
 const elements = {
@@ -37,13 +38,28 @@ function initialize() {
   renderSegmentedButtons(elements.dimensionToggle, DIMENSION_OPTIONS, state.dimension, handleDimensionChange);
   renderAlphaButtons();
   renderViewer();
+  loadScores();
+}
+
+async function loadScores() {
+  try {
+    const response = await fetch("./assessor_scores/scores.json?v=1");
+    if (!response.ok) {
+      throw new Error(`Score request failed with ${response.status}`);
+    }
+
+    state.scores = await response.json();
+    renderViewer();
+  } catch (error) {
+    console.error("Unable to load assessor scores.", error);
+  }
 }
 
 function populateImageSelect() {
-  IMAGE_IDS.forEach((imageId) => {
+  IMAGE_IDS.forEach((imageId, index) => {
     const option = document.createElement("option");
     option.value = imageId;
-    option.textContent = `Example ${imageId}`;
+    option.textContent = `Image ${index + 1}`;
     elements.imageSelect.append(option);
   });
 
@@ -117,7 +133,7 @@ function renderViewer() {
   elements.originalImage.src = buildOriginalPath(imageId);
   elements.originalImage.alt = `Original image example ${imageId}`;
 
-  elements.summary.textContent = `Example ${imageId} · ${getLabel(MODEL_OPTIONS, model)} · ${getLabel(DIMENSION_OPTIONS, dimension)} · ${
+  elements.summary.textContent = `${getImageLabel(imageId)} · ${getLabel(MODEL_OPTIONS, model)} · ${getLabel(DIMENSION_OPTIONS, dimension)} · ${
     state.visibleAlphas.size
   } alpha level${state.visibleAlphas.size === 1 ? "" : "s"} visible`;
 
@@ -163,11 +179,14 @@ function createAlphaCard(alpha) {
   const card = fragment.querySelector(".alpha-card");
   const title = fragment.querySelector("h3");
   const image = fragment.querySelector("img");
+  const score = fragment.querySelector(".assessor-score");
+  const mappedAlpha = getDisplayMappedAlpha(state.dimension, alpha);
 
   card.dataset.alpha = String(alpha);
   title.textContent = `Alpha ${formatAlpha(alpha)}`;
-  image.src = buildManipulatedPath(state.imageId, state.model, state.dimension, getDisplayMappedAlpha(state.dimension, alpha));
+  image.src = buildManipulatedPath(state.imageId, state.model, state.dimension, mappedAlpha);
   image.alt = `${getLabel(MODEL_OPTIONS, state.model)} ${getLabel(DIMENSION_OPTIONS, state.dimension)} alpha ${alpha} for example ${state.imageId}`;
+  score.textContent = formatScore(getAssessorScore(state.imageId, state.model, state.dimension, mappedAlpha));
 
   return fragment;
 }
@@ -180,23 +199,48 @@ function createEmptyState(message, region) {
 }
 
 function buildOriginalPath(imageId) {
-  return `./original_test_images/${imageId}.png`;
+  return `./used_images/original_test_images/${imageId}.png`;
 }
 
 function buildManipulatedPath(imageId, model, dimension, alpha) {
-  return `./reconstrutions/${model}/${dimension}/alpha_${alpha}/${imageId}.png`;
+  return `./used_images/reconstrutions/${model}/${dimension}/alpha_${alpha}/${imageId}.png`;
 }
 
 function getDisplayMappedAlpha(dimension, alpha) {
-  if (dimension === "emonet") {
-    return alpha * -1;
-  }
-
   return alpha;
 }
 
 function getLabel(options, value) {
   return options.find((option) => option.value === value)?.label ?? value;
+}
+
+function getAssessorScore(imageId, model, dimension, alpha) {
+  return state.scores?.[model]?.[dimension]?.[`alpha_${alpha}`]?.[Number(imageId)];
+}
+
+function formatScore(score) {
+  if (typeof score !== "number") {
+    return "Assessor score loading...";
+  }
+
+  return `${getScoreLabel(state.dimension)}: ${score.toFixed(3)}`;
+}
+
+function getImageLabel(imageId) {
+  const imageIndex = IMAGE_IDS.indexOf(imageId);
+  return imageIndex >= 0 ? `Image ${imageIndex + 1}` : `Image ${imageId}`;
+}
+
+function getScoreLabel(dimension) {
+  if (dimension === "memnet") {
+    return "Memorability";
+  }
+
+  if (dimension === "emonet") {
+    return "Arousal";
+  }
+
+  return "Score";
 }
 
 function formatAlpha(alpha) {

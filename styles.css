@@ -53,6 +53,12 @@ select {
   padding: 2rem 0 4rem;
 }
 
+a {
+  color: var(--accent);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
 .hero {
   position: relative;
   overflow: hidden;
@@ -164,8 +170,106 @@ select {
 
 .hero-linkout a {
   color: var(--accent);
-  text-decoration-thickness: 0.08em;
-  text-underline-offset: 0.18em;
+}
+
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.45rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--muted);
+  box-shadow: var(--shadow);
+}
+
+.site-footer p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  font-weight: 700;
+}
+
+.legal-page {
+  max-width: 960px;
+}
+
+.legal-header,
+.legal-doc {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.legal-header {
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.legal-header h1 {
+  margin: 0;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: clamp(2.3rem, 4vw, 4rem);
+  line-height: 1.03;
+}
+
+.legal-header p:last-child {
+  margin: 1rem 0 0;
+  font-weight: 700;
+}
+
+.legal-doc {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+}
+
+.legal-doc section {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.legal-doc h2,
+.legal-doc h3,
+.legal-doc h4,
+.legal-doc p {
+  margin: 0;
+}
+
+.legal-doc h2,
+.legal-doc h3 {
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  letter-spacing: -0.02em;
+}
+
+.legal-doc h2 {
+  font-size: 1.6rem;
+}
+
+.legal-doc h3 {
+  margin-top: 0.25rem;
+  font-size: 1.25rem;
+}
+
+.legal-doc h4 {
+  margin-top: 0.1rem;
+  font-size: 1rem;
+}
+
+.legal-doc p {
+  color: var(--muted);
+  line-height: 1.65;
 }
 
 .layout {
@@ -727,6 +831,19 @@ select {
   .viewer-header {
     flex-direction: column;
     align-items: start;
+  }
+
+  .site-footer {
+    flex-direction: column;
+    align-items: start;
+    padding: 1.1rem;
+    border-radius: 22px;
+  }
+
+  .legal-header,
+  .legal-doc {
+    padding: 1.1rem;
+    border-radius: 22px;
   }
 
   .process-section {
